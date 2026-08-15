@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A clean Europe trip itinerary with daily plans, booked activities, and travel days."
+    />
+    <title>Europe Itinerary</title>
+    <link rel="preload" href="styles.css" as="style" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#itinerary">Skip to itinerary</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="header-copy">
+          <p class="eyebrow">9 Sep - 2 Oct</p>
+          <h1>Europe</h1>
+        </div>
+
+        <figure class="route-figure">
+          <img
+            src="dolomites.jpg"
+            alt="Mountain view in the Dolomites"
+            width="560"
+            height="360"
+          />
+        </figure>
+      </div>
+    </header>
+
+    <nav class="topbar" aria-label="Itinerary navigation">
+      <div class="topbar-inner">
+        <div class="city-links" id="city-links"></div>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Use light theme">
+          <span class="theme-icon" aria-hidden="true">☀</span>
+          <span class="theme-text">Light</span>
+        </button>
+      </div>
+    </nav>
+
+    <main id="itinerary" class="page-shell">
+      <div id="cities" class="cities" aria-live="polite"></div>
+    </main>
+
+    <script src="photos.js" defer></script>
+    <script src="app.js" defer></script>
+  </body>
+</html>

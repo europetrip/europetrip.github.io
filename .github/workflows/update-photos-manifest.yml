@@ -1,0 +1,28 @@
+name: Update photos manifest
+
+on:
+  push:
+    paths:
+      - "photos/**"
+      - "scripts/generate_photos_manifest.py"
+      - ".github/workflows/update-photos-manifest.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-photos-manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Generate photos.js
+        run: python3 scripts/generate_photos_manifest.py
+
+      - name: Commit updated manifest
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update photos manifest
+          file_pattern: photos.js
