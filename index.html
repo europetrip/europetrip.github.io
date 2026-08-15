@@ -8,8 +8,8 @@
       content="A clean Europe trip itinerary with daily plans, booked activities, and travel days."
     />
     <title>Europe</title>
-    <link rel="preload" href="styles.css?v=20260815-7" as="style" />
-    <link rel="stylesheet" href="styles.css?v=20260815-7" />
+    <link rel="preload" href="styles.css?v=20260815-8" as="style" />
+    <link rel="stylesheet" href="styles.css?v=20260815-8" />
   </head>
   <body>
     <a class="skip-link" href="#itinerary">Skip to itinerary</a>
@@ -19,6 +19,9 @@
         <div class="header-copy">
           <p class="eyebrow">9 Sep - 2 Oct</p>
           <h1>Europe</h1>
+          <div class="header-actions">
+            <button class="view-button" id="show-wheel" type="button">Spin wheel</button>
+          </div>
         </div>
 
         <figure class="route-figure">
@@ -32,7 +35,7 @@
       </div>
     </header>
 
-    <nav class="topbar" aria-label="Itinerary navigation">
+    <nav class="topbar" id="itinerary-nav" aria-label="Itinerary navigation">
       <div class="topbar-inner">
         <div class="city-links" id="city-links"></div>
       </div>
@@ -42,6 +45,32 @@
       <div id="cities" class="cities" aria-live="polite"></div>
     </main>
 
-    <script src="app.js?v=20260815-6" defer></script>
+    <section class="page-shell wheel-page" id="wheel-page" hidden aria-labelledby="wheel-title">
+      <div class="wheel-top">
+        <div>
+          <p class="eyebrow">Decision wheel</p>
+          <h2 id="wheel-title">Spin</h2>
+        </div>
+        <button class="view-button secondary" id="show-itinerary" type="button">Itinerary</button>
+      </div>
+
+      <div class="wheel-layout">
+        <div class="wheel-stage" aria-label="Wheel with Liam, Remy, and Raymond">
+          <div class="wheel-pointer" aria-hidden="true"></div>
+          <div class="wheel-disc" id="wheel-disc">
+            <span class="wheel-name name-liam">Liam</span>
+            <span class="wheel-name name-remy">Remy</span>
+            <span class="wheel-name name-raymond">Raymond</span>
+          </div>
+        </div>
+
+        <div class="wheel-controls">
+          <p class="wheel-result" id="wheel-result" aria-live="polite">Ready</p>
+          <button class="spin-button" id="spin-wheel" type="button">Spin</button>
+        </div>
+      </div>
+    </section>
+
+    <script src="app.js?v=20260815-8" defer></script>
   </body>
 </html>

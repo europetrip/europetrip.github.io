@@ -306,19 +306,37 @@ const itinerary = [
 
 const cityLinks = document.querySelector("#city-links");
 const citiesRoot = document.querySelector("#cities");
+const itineraryNav = document.querySelector("#itinerary-nav");
+const itineraryPage = document.querySelector("#itinerary");
+const showWheelButton = document.querySelector("#show-wheel");
+const showItineraryButton = document.querySelector("#show-itinerary");
+const wheelPage = document.querySelector("#wheel-page");
+const wheelDisc = document.querySelector("#wheel-disc");
+const spinWheelButton = document.querySelector("#spin-wheel");
+const wheelResult = document.querySelector("#wheel-result");
 let tripPhotos = {};
 let photoResizeTimer;
+let wheelRotation = 0;
+let wheelSpinning = false;
 
 loadPhotoManifest().then(() => {
   renderNavigation();
   renderCities();
   initPhotoLayouts();
+  syncViewFromHash();
 });
 
 window.addEventListener("resize", () => {
   clearTimeout(photoResizeTimer);
   photoResizeTimer = setTimeout(layoutPhotoGalleries, 120);
 });
+
+window.addEventListener("hashchange", syncViewFromHash);
+window.addEventListener("popstate", syncViewFromHash);
+showWheelButton.addEventListener("click", () => showView("wheel"));
+showItineraryButton.addEventListener("click", () => showView("itinerary"));
+spinWheelButton.addEventListener("click", spinWheel);
+syncViewFromHash();
 
 function loadPhotoManifest() {
   return new Promise((resolve) => {
@@ -334,6 +352,57 @@ function loadPhotoManifest() {
     };
     document.head.append(script);
   });
+}
+
+function showView(view) {
+  if (view === "wheel") {
+    history.pushState(null, "", "#wheel");
+  } else {
+    history.pushState(null, "", "#itinerary");
+  }
+
+  syncViewFromHash();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function syncViewFromHash() {
+  const isWheel = window.location.hash === "#wheel";
+  itineraryPage.hidden = isWheel;
+  itineraryNav.hidden = isWheel;
+  wheelPage.hidden = !isWheel;
+}
+
+function spinWheel() {
+  if (wheelSpinning) return;
+
+  const segments = [
+    { name: "Liam", center: 0 },
+    { name: "Remy", center: 120 },
+    { name: "Raymond", center: 240 },
+  ];
+  const winningIndex = Math.floor(Math.random() * segments.length);
+  const winner = segments[winningIndex];
+  const extraSpins = 5 + Math.floor(Math.random() * 3);
+  const pointerAngle = 0;
+  const currentOffset = positiveModulo(wheelRotation, 360);
+  const targetOffset = positiveModulo(pointerAngle - winner.center, 360);
+  const delta = positiveModulo(targetOffset - currentOffset, 360);
+
+  wheelSpinning = true;
+  wheelResult.textContent = "Spinning";
+  spinWheelButton.disabled = true;
+  wheelRotation += extraSpins * 360 + delta;
+  wheelDisc.style.transform = `rotate(${wheelRotation}deg)`;
+
+  window.setTimeout(() => {
+    wheelSpinning = false;
+    spinWheelButton.disabled = false;
+    wheelResult.textContent = winner.name;
+  }, 4200);
+}
+
+function positiveModulo(value, divisor) {
+  return ((value % divisor) + divisor) % divisor;
 }
 
 function renderNavigation() {
