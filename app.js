@@ -309,7 +309,6 @@ const citiesRoot = document.querySelector("#cities");
 const itineraryNav = document.querySelector("#itinerary-nav");
 const itineraryPage = document.querySelector("#itinerary");
 const showWheelButton = document.querySelector("#show-wheel");
-const showItineraryButton = document.querySelector("#show-itinerary");
 const wheelPage = document.querySelector("#wheel-page");
 const wheelDisc = document.querySelector("#wheel-disc");
 const wheelLabels = document.querySelector("#wheel-labels");
@@ -341,8 +340,9 @@ window.addEventListener("resize", () => {
 
 window.addEventListener("hashchange", syncViewFromHash);
 window.addEventListener("popstate", syncViewFromHash);
-showWheelButton.addEventListener("click", () => showView("wheel"));
-showItineraryButton.addEventListener("click", () => showView("itinerary"));
+showWheelButton.addEventListener("click", () => {
+  showView(window.location.hash === "#wheel" ? "itinerary" : "wheel");
+});
 spinWheelButton.addEventListener("click", spinWheel);
 wheelOptions.addEventListener("input", updateWheelFromOptions);
 closeResultButton.addEventListener("click", closeResultModal);
@@ -392,6 +392,7 @@ function syncViewFromHash() {
   itineraryPage.hidden = isWheel;
   itineraryNav.hidden = isWheel;
   wheelPage.hidden = !isWheel;
+  showWheelButton.textContent = isWheel ? "Itinerary" : "Spin wheel";
 }
 
 function spinWheel() {
