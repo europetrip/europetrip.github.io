@@ -420,8 +420,8 @@ function spinWheel() {
     wheelSpinning = false;
     spinWheelButton.disabled = false;
     wheelResult.textContent = winner.name;
-    selectedSegment = { name: winner.name, index: winningIndex };
-    openResultModal(winner.name);
+    selectedSegment = { name: winner.name, index: winningIndex, color: winner.color };
+    openResultModal(winner);
   }, 4800);
 }
 
@@ -501,8 +501,9 @@ function escapeHtml(value) {
   })[character]);
 }
 
-function openResultModal(name) {
-  resultModalName.textContent = name;
+function openResultModal(segment) {
+  resultModalName.textContent = segment.name;
+  resultModal.style.setProperty("--modal-accent", segment.color);
   resultModal.hidden = false;
   document.body.classList.add("modal-open");
   closeResultButton.focus();

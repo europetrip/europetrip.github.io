@@ -389,6 +389,7 @@ h1 {
 }
 
 .result-modal-panel {
+  --modal-accent: var(--accent);
   position: relative;
   width: min(100%, 440px);
   border: 1px solid var(--line-strong);
@@ -398,9 +399,9 @@ h1 {
   padding: 1.3rem;
 }
 
-.result-modal-panel h2 {
+.result-modal-kicker {
   margin-bottom: 0.8rem;
-  font-size: 1.2rem;
+  color: var(--modal-accent);
 }
 
 .result-modal-name {
@@ -416,6 +417,12 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   gap: 0.7rem;
+}
+
+#remove-result {
+  border-color: color-mix(in srgb, var(--modal-accent) 50%, var(--line));
+  background: var(--modal-accent);
+  color: #111315;
 }
 
 .city-meta span,
