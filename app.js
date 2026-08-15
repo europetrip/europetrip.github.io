@@ -478,18 +478,23 @@ function layoutPhotoGallery(gallery) {
 
   rows.forEach((row, index) => {
     const rowElement = document.createElement("div");
-    const rowWidth = row.reduce((total, figure) => total + figure.getBoundingClientRect().width, 0);
+    const ratios = row.map(getPhotoRatio);
+    const ratioTotal = ratios.reduce((total, ratio) => total + ratio, 0);
+    const borderWidth = getPhotoBorderWidth(row[0]);
     const usableWidth = width - gap * (row.length - 1);
-    const scale = rowWidth ? usableWidth / rowWidth : 1;
     const isLastRow = index === rows.length - 1;
     const rowHeight = isLastRow && rows.length > 1
       ? targetHeight
-      : Math.max(targetHeight, Math.floor(targetHeight * scale) - 1);
+      : Math.max(targetHeight, Math.floor((usableWidth - borderWidth * row.length) / ratioTotal));
 
     rowElement.className = "photo-row";
     rowElement.style.setProperty("--photo-row-height", `${rowHeight}px`);
-    row.forEach((figure) => {
-      figure.querySelector("img")?.style.removeProperty("height");
+    row.forEach((figure, figureIndex) => {
+      const image = figure.querySelector("img");
+      if (image) {
+        image.style.width = `${Math.floor(rowHeight * ratios[figureIndex])}px`;
+        image.style.height = `${rowHeight}px`;
+      }
       rowElement.append(figure);
     });
     gallery.append(rowElement);
@@ -501,8 +506,24 @@ function resetPhotoGallery(gallery, targetHeight) {
   gallery.classList.remove("photo-grid-justified");
   gallery.replaceChildren(...figures);
   gallery.querySelectorAll("img").forEach((image) => {
+    image.style.removeProperty("width");
     image.style.height = `${targetHeight}px`;
   });
+}
+
+function getPhotoRatio(figure) {
+  const image = figure.querySelector("img");
+  return image?.naturalWidth && image?.naturalHeight
+    ? image.naturalWidth / image.naturalHeight
+    : 1;
+}
+
+function getPhotoBorderWidth(figure) {
+  const image = figure?.querySelector("img");
+  if (!image) return 0;
+
+  const styles = getComputedStyle(image);
+  return (parseFloat(styles.borderLeftWidth) || 0) + (parseFloat(styles.borderRightWidth) || 0);
 }
 
 function groupPhotoRows(gallery) {
