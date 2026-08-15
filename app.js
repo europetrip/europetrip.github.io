@@ -304,30 +304,10 @@ const itinerary = [
 const root = document.documentElement;
 const cityLinks = document.querySelector("#city-links");
 const citiesRoot = document.querySelector("#cities");
-const themeToggle = document.querySelector("#theme-toggle");
 const tripPhotos = window.tripPhotos ?? {};
 
-const storedTheme = localStorage.getItem("theme");
-if (storedTheme === "light" || storedTheme === "dark") {
-  root.dataset.theme = storedTheme;
-}
-
-updateThemeButton();
 renderNavigation();
 renderCities();
-
-themeToggle.addEventListener("click", () => {
-  root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
-  localStorage.setItem("theme", root.dataset.theme);
-  updateThemeButton();
-});
-
-function updateThemeButton() {
-  const isDark = root.dataset.theme === "dark";
-  themeToggle.setAttribute("aria-label", isDark ? "Use light theme" : "Use dark theme");
-  themeToggle.querySelector(".theme-icon").textContent = isDark ? "☀" : "☾";
-  themeToggle.querySelector(".theme-text").textContent = isDark ? "Light" : "Dark";
-}
 
 function renderNavigation() {
   cityLinks.innerHTML = itinerary

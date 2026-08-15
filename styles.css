@@ -184,8 +184,7 @@ h1 {
   scrollbar-width: thin;
 }
 
-.city-links a,
-.theme-toggle {
+.city-links a {
   min-height: 42px;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -204,23 +203,9 @@ h1 {
   text-decoration: none;
 }
 
-.city-links a:hover,
-.theme-toggle:hover {
+.city-links a:hover {
   border-color: var(--line-strong);
   background: var(--panel-strong);
-}
-
-.theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0 0.85rem;
-  cursor: pointer;
-}
-
-.theme-icon {
-  font-size: 1rem;
-  line-height: 1;
 }
 
 .page-shell {
@@ -456,10 +441,6 @@ h1 {
     align-items: stretch;
     flex-direction: column;
     padding: 0.65rem 0 0.8rem;
-  }
-
-  .theme-toggle {
-    justify-content: center;
   }
 
   .city-section {
