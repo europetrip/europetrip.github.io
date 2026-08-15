@@ -476,6 +476,7 @@ function layoutPhotoGallery(gallery) {
   gallery.classList.add("photo-grid-justified");
   gallery.replaceChildren();
 
+  const rowHeights = [];
   rows.forEach((row, index) => {
     const rowElement = document.createElement("div");
     const ratios = row.map(getPhotoRatio);
@@ -484,9 +485,10 @@ function layoutPhotoGallery(gallery) {
     const usableWidth = width - gap * (row.length - 1);
     const isLastRow = index === rows.length - 1;
     const rowHeight = isLastRow && rows.length > 1
-      ? targetHeight
+      ? rowHeights[index - 1]
       : Math.max(targetHeight, Math.floor((usableWidth - borderWidth * row.length) / ratioTotal));
 
+    rowHeights.push(rowHeight);
     rowElement.className = "photo-row";
     rowElement.style.setProperty("--photo-row-height", `${rowHeight}px`);
     row.forEach((figure, figureIndex) => {
