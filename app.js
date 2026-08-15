@@ -301,13 +301,30 @@ const itinerary = [
   },
 ];
 
-const root = document.documentElement;
 const cityLinks = document.querySelector("#city-links");
 const citiesRoot = document.querySelector("#cities");
-const tripPhotos = window.tripPhotos ?? {};
+let tripPhotos = {};
 
-renderNavigation();
-renderCities();
+loadPhotoManifest().then(() => {
+  renderNavigation();
+  renderCities();
+});
+
+function loadPhotoManifest() {
+  return new Promise((resolve) => {
+    const script = document.createElement("script");
+    script.src = `photos.js?v=${Date.now()}`;
+    script.onload = () => {
+      tripPhotos = window.tripPhotos ?? {};
+      resolve();
+    };
+    script.onerror = () => {
+      tripPhotos = {};
+      resolve();
+    };
+    document.head.append(script);
+  });
+}
 
 function renderNavigation() {
   cityLinks.innerHTML = itinerary
