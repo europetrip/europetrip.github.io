@@ -316,6 +316,7 @@ const wheelOptions = document.querySelector("#wheel-options");
 const spinWheelButton = document.querySelector("#spin-wheel");
 const wheelResult = document.querySelector("#wheel-result");
 const resultModal = document.querySelector("#result-modal");
+const resultModalPanel = document.querySelector(".result-modal-panel");
 const resultModalName = document.querySelector("#result-modal-name");
 const closeResultButton = document.querySelector("#close-result");
 const removeResultButton = document.querySelector("#remove-result");
@@ -503,7 +504,7 @@ function escapeHtml(value) {
 
 function openResultModal(segment) {
   resultModalName.textContent = segment.name;
-  resultModal.style.setProperty("--modal-accent", segment.color);
+  resultModalPanel.style.setProperty("--modal-accent", segment.color);
   resultModal.hidden = false;
   document.body.classList.add("modal-open");
   closeResultButton.focus();
