@@ -397,7 +397,8 @@ h1 {
 
 .photo-tile img {
   width: 100%;
-  height: auto;
+  height: 180px;
+  object-fit: contain;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--panel);
@@ -458,6 +459,10 @@ h1 {
 
   .photo-grid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  .photo-tile img {
+    height: 150px;
   }
 }
 
