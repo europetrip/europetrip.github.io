@@ -304,10 +304,17 @@ const itinerary = [
 const cityLinks = document.querySelector("#city-links");
 const citiesRoot = document.querySelector("#cities");
 let tripPhotos = {};
+let photoResizeTimer;
 
 loadPhotoManifest().then(() => {
   renderNavigation();
   renderCities();
+  initPhotoLayouts();
+});
+
+window.addEventListener("resize", () => {
+  clearTimeout(photoResizeTimer);
+  photoResizeTimer = setTimeout(layoutPhotoGalleries, 120);
 });
 
 function loadPhotoManifest() {
@@ -430,6 +437,71 @@ function renderPhoto(photo, city, citySlug, index) {
       ${caption ? `<figcaption>${caption}</figcaption>` : ""}
     </figure>
   `;
+}
+
+function initPhotoLayouts() {
+  const images = [...document.querySelectorAll(".photo-grid img")];
+  if (!images.length) return;
+
+  Promise.all(images.map(waitForImage)).then(layoutPhotoGalleries);
+}
+
+function waitForImage(image) {
+  if (image.complete) return Promise.resolve();
+
+  return new Promise((resolve) => {
+    image.addEventListener("load", resolve, { once: true });
+    image.addEventListener("error", resolve, { once: true });
+  });
+}
+
+function layoutPhotoGalleries() {
+  document.querySelectorAll(".photo-grid").forEach(layoutPhotoGallery);
+}
+
+function layoutPhotoGallery(gallery) {
+  const images = [...gallery.querySelectorAll("img")];
+  if (!images.length) return;
+
+  const styles = getComputedStyle(gallery);
+  const columnGap = parseFloat(styles.columnGap);
+  const flexGap = parseFloat(styles.gap);
+  const gap = Number.isNaN(columnGap) ? (Number.isNaN(flexGap) ? 0 : flexGap) : columnGap;
+  const targetHeight = window.matchMedia("(max-width: 650px)").matches ? 195 : 234;
+  const width = gallery.clientWidth;
+  if (!width) return;
+  const rows = [];
+  let row = [];
+  let ratioTotal = 0;
+
+  images.forEach((image) => {
+    const ratio = image.naturalWidth && image.naturalHeight
+      ? image.naturalWidth / image.naturalHeight
+      : 1;
+    const nextRatioTotal = ratioTotal + ratio;
+    const nextWidth = nextRatioTotal * targetHeight + gap * row.length;
+
+    if (row.length && nextWidth > width) {
+      rows.push({ items: row, ratioTotal });
+      row = [{ image, ratio }];
+      ratioTotal = ratio;
+    } else {
+      row.push({ image, ratio });
+      ratioTotal = nextRatioTotal;
+    }
+  });
+
+  if (row.length) rows.push({ items: row, ratioTotal });
+
+  const longestRow = rows.reduce((longest, current) => {
+    const currentWidth = current.ratioTotal * targetHeight + gap * (current.items.length - 1);
+    const longestWidth = longest.ratioTotal * targetHeight + gap * (longest.items.length - 1);
+    return currentWidth > longestWidth ? current : longest;
+  }, rows[0]);
+  const usableWidth = width - gap * (longestRow.items.length - 1);
+  const height = Math.max(targetHeight, usableWidth / longestRow.ratioTotal);
+
+  gallery.style.setProperty("--photo-height", `${Math.round(height)}px`);
 }
 
 function slugify(value) {

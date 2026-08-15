@@ -398,7 +398,7 @@ h1 {
 
 .photo-tile img {
   width: auto;
-  height: 234px;
+  height: var(--photo-height, 234px);
   max-width: 100%;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -459,7 +459,7 @@ h1 {
   }
 
   .photo-tile img {
-    height: 195px;
+    height: var(--photo-height, 195px);
   }
 }
 
