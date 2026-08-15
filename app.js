@@ -383,9 +383,12 @@ function spinWheel() {
   const winningIndex = Math.floor(Math.random() * segments.length);
   const winner = segments[winningIndex];
   const extraSpins = 5 + Math.floor(Math.random() * 3);
+  const segmentMargin = 10;
+  const randomSegmentOffset = -60 + segmentMargin + Math.random() * (120 - segmentMargin * 2);
+  const targetAngle = winner.center + randomSegmentOffset;
   const pointerAngle = 0;
   const currentOffset = positiveModulo(wheelRotation, 360);
-  const targetOffset = positiveModulo(pointerAngle - winner.center, 360);
+  const targetOffset = positiveModulo(pointerAngle - targetAngle, 360);
   const delta = positiveModulo(targetOffset - currentOffset, 360);
 
   wheelSpinning = true;
@@ -398,7 +401,7 @@ function spinWheel() {
     wheelSpinning = false;
     spinWheelButton.disabled = false;
     wheelResult.textContent = winner.name;
-  }, 4200);
+  }, 4800);
 }
 
 function positiveModulo(value, divisor) {
