@@ -316,11 +316,16 @@ const wheelLabels = document.querySelector("#wheel-labels");
 const wheelOptions = document.querySelector("#wheel-options");
 const spinWheelButton = document.querySelector("#spin-wheel");
 const wheelResult = document.querySelector("#wheel-result");
+const resultModal = document.querySelector("#result-modal");
+const resultModalName = document.querySelector("#result-modal-name");
+const closeResultButton = document.querySelector("#close-result");
+const removeResultButton = document.querySelector("#remove-result");
 let tripPhotos = {};
 let photoResizeTimer;
 let wheelRotation = 0;
 let wheelSpinning = false;
 let wheelSegments = [];
+let selectedSegment = null;
 
 loadPhotoManifest().then(() => {
   renderNavigation();
@@ -340,6 +345,18 @@ showWheelButton.addEventListener("click", () => showView("wheel"));
 showItineraryButton.addEventListener("click", () => showView("itinerary"));
 spinWheelButton.addEventListener("click", spinWheel);
 wheelOptions.addEventListener("input", updateWheelFromOptions);
+closeResultButton.addEventListener("click", closeResultModal);
+removeResultButton.addEventListener("click", removeSelectedSegment);
+resultModal.addEventListener("click", (event) => {
+  if (event.target === resultModal || event.target.classList.contains("result-modal-backdrop")) {
+    closeResultModal();
+  }
+});
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !resultModal.hidden) {
+    closeResultModal();
+  }
+});
 syncViewFromHash();
 updateWheelFromOptions();
 
@@ -402,6 +419,8 @@ function spinWheel() {
     wheelSpinning = false;
     spinWheelButton.disabled = false;
     wheelResult.textContent = winner.name;
+    selectedSegment = { name: winner.name, index: winningIndex };
+    openResultModal(winner.name);
   }, 4800);
 }
 
@@ -425,6 +444,7 @@ function updateWheelFromOptions() {
   renderWheel();
   wheelResult.textContent = wheelSegments.length ? "Ready" : "Add options";
   spinWheelButton.disabled = !wheelSegments.length;
+  selectedSegment = null;
 }
 
 function renderWheel() {
@@ -478,6 +498,38 @@ function escapeHtml(value) {
     "\"": "&quot;",
     "'": "&#039;",
   })[character]);
+}
+
+function openResultModal(name) {
+  resultModalName.textContent = name;
+  resultModal.hidden = false;
+  document.body.classList.add("modal-open");
+  closeResultButton.focus();
+}
+
+function closeResultModal() {
+  resultModal.hidden = true;
+  document.body.classList.remove("modal-open");
+}
+
+function removeSelectedSegment() {
+  if (!selectedSegment) {
+    closeResultModal();
+    return;
+  }
+
+  const lines = wheelOptions.value.split(/\r?\n/);
+  let nonEmptyIndex = -1;
+  const nextLines = lines.filter((line) => {
+    if (!line.trim()) return true;
+
+    nonEmptyIndex += 1;
+    return nonEmptyIndex !== selectedSegment.index;
+  });
+
+  wheelOptions.value = nextLines.join("\n").replace(/^\n+|\n+$/g, "");
+  closeResultModal();
+  updateWheelFromOptions();
 }
 
 function renderNavigation() {

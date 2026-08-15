@@ -55,6 +55,10 @@ body {
   line-height: 1.55;
 }
 
+body.modal-open > :not(.result-modal) {
+  filter: blur(7px);
+}
+
 :root[data-theme="light"] body {
   background:
     radial-gradient(circle at 25% 0%, rgba(152, 107, 0, 0.12), transparent 28rem),
@@ -363,6 +367,55 @@ h1 {
   padding: 0.8rem 0.9rem;
   font: inherit;
   resize: vertical;
+}
+
+.result-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.result-modal[hidden] {
+  display: none;
+}
+
+.result-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.48);
+}
+
+.result-modal-panel {
+  position: relative;
+  width: min(100%, 440px);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  padding: 1.3rem;
+}
+
+.result-modal-panel h2 {
+  margin-bottom: 0.8rem;
+  font-size: 1.2rem;
+}
+
+.result-modal-name {
+  margin-bottom: 1.2rem;
+  color: var(--text);
+  font-size: clamp(2rem, 10vw, 4rem);
+  font-weight: 900;
+  line-height: 1;
+  overflow-wrap: anywhere;
+}
+
+.result-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
 }
 
 .city-meta span,
