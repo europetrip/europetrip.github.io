@@ -7,14 +7,17 @@ const itinerary = [
       {
         label: "Wed 9 Sep",
         note: "Arrive in Vienna",
-        items: [{ title: "Figlmuller dinner", type: "booked", time: "8:00 PM" }],
+        travel: [{ icon: "✈️", title: "Arrive in Vienna", time: "12:00 PM" }],
+        items: [
+          { title: "St Stephen's Cathedral" },
+          { title: "Figlmuller dinner", type: "booked", time: "8:00 PM" },
+        ],
       },
       {
         label: "Thu 10 Sep",
         note: "Full Vienna day",
         items: [
           { title: "Hofburg Palace and gardens" },
-          { title: "St Stephen's Cathedral" },
           { title: "Kunsthistorisches Museum Wien" },
           { title: "Mozart things" },
         ],
