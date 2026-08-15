@@ -381,7 +381,7 @@ function showView(view) {
   if (view === "wheel") {
     history.pushState(null, "", "#wheel");
   } else {
-    history.pushState(null, "", "#itinerary");
+    history.pushState(null, "", `${window.location.pathname}${window.location.search}`);
   }
 
   syncViewFromHash();
