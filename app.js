@@ -312,12 +312,15 @@ const showWheelButton = document.querySelector("#show-wheel");
 const showItineraryButton = document.querySelector("#show-itinerary");
 const wheelPage = document.querySelector("#wheel-page");
 const wheelDisc = document.querySelector("#wheel-disc");
+const wheelLabels = document.querySelector("#wheel-labels");
+const wheelOptions = document.querySelector("#wheel-options");
 const spinWheelButton = document.querySelector("#spin-wheel");
 const wheelResult = document.querySelector("#wheel-result");
 let tripPhotos = {};
 let photoResizeTimer;
 let wheelRotation = 0;
 let wheelSpinning = false;
+let wheelSegments = [];
 
 loadPhotoManifest().then(() => {
   renderNavigation();
@@ -336,7 +339,9 @@ window.addEventListener("popstate", syncViewFromHash);
 showWheelButton.addEventListener("click", () => showView("wheel"));
 showItineraryButton.addEventListener("click", () => showView("itinerary"));
 spinWheelButton.addEventListener("click", spinWheel);
+wheelOptions.addEventListener("input", updateWheelFromOptions);
 syncViewFromHash();
+updateWheelFromOptions();
 
 function loadPhotoManifest() {
   return new Promise((resolve) => {
@@ -374,17 +379,13 @@ function syncViewFromHash() {
 
 function spinWheel() {
   if (wheelSpinning) return;
+  if (!wheelSegments.length) return;
 
-  const segments = [
-    { name: "Liam", center: 0 },
-    { name: "Remy", center: 120 },
-    { name: "Raymond", center: 240 },
-  ];
-  const winningIndex = Math.floor(Math.random() * segments.length);
-  const winner = segments[winningIndex];
+  const winningIndex = Math.floor(Math.random() * wheelSegments.length);
+  const winner = wheelSegments[winningIndex];
   const extraSpins = 5 + Math.floor(Math.random() * 3);
-  const segmentMargin = 10;
-  const randomSegmentOffset = -60 + segmentMargin + Math.random() * (120 - segmentMargin * 2);
+  const margin = Math.min(10, winner.sliceAngle * 0.18);
+  const randomSegmentOffset = -winner.sliceAngle / 2 + margin + Math.random() * (winner.sliceAngle - margin * 2);
   const targetAngle = winner.center + randomSegmentOffset;
   const pointerAngle = 0;
   const currentOffset = positiveModulo(wheelRotation, 360);
@@ -406,6 +407,77 @@ function spinWheel() {
 
 function positiveModulo(value, divisor) {
   return ((value % divisor) + divisor) % divisor;
+}
+
+function updateWheelFromOptions() {
+  const names = wheelOptions.value
+    .split(/\r?\n/)
+    .map((name) => name.trim())
+    .filter(Boolean);
+
+  wheelSegments = names.map((name, index) => ({
+    name,
+    color: getWheelColor(index, names.length),
+    center: names.length ? index * (360 / names.length) : 0,
+    sliceAngle: names.length ? 360 / names.length : 360,
+  }));
+
+  renderWheel();
+  wheelResult.textContent = wheelSegments.length ? "Ready" : "Add options";
+  spinWheelButton.disabled = !wheelSegments.length;
+}
+
+function renderWheel() {
+  if (!wheelSegments.length) {
+    wheelDisc.style.background = "var(--panel)";
+    wheelLabels.innerHTML = "";
+    return;
+  }
+
+  const sliceAngle = 360 / wheelSegments.length;
+  const gradientStops = wheelSegments
+    .map((segment, index) => {
+      const start = index * sliceAngle;
+      const end = (index + 1) * sliceAngle;
+      return `${segment.color} ${start}deg ${end}deg`;
+    })
+    .join(", ");
+
+  wheelDisc.style.background = `conic-gradient(from ${-sliceAngle / 2}deg, ${gradientStops})`;
+  wheelLabels.innerHTML = wheelSegments.map(renderWheelLabel).join("");
+}
+
+function renderWheelLabel(segment, index) {
+  const fontScale = Math.max(0.62, Math.min(1, 3.4 / wheelSegments.length));
+  const angle = segment.center;
+
+  return `
+    <span
+      class="wheel-name"
+      style="--label-angle: ${angle}deg; --label-font-scale: ${fontScale};"
+    >
+      ${escapeHtml(segment.name)}
+    </span>
+  `;
+}
+
+function getWheelColor(index, count) {
+  const colors = ["#69a7ff", "#f6c85f", "#58d68d"];
+  if (count > 1 && count % colors.length === 1 && index === count - 1) {
+    return colors[1];
+  }
+
+  return colors[index % colors.length];
+}
+
+function escapeHtml(value) {
+  return value.replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+    "'": "&#039;",
+  })[character]);
 }
 
 function renderNavigation() {
