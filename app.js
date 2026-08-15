@@ -433,7 +433,7 @@ function renderPhoto(photo, city, citySlug, index) {
 
   return `
     <figure class="photo-tile">
-      <img src="photos/${citySlug}/${encodeURI(filename)}" alt="${alt}" loading="lazy" />
+      <img src="photos/${citySlug}/${encodeURI(filename)}" alt="${alt}" />
       ${caption ? `<figcaption>${caption}</figcaption>` : ""}
     </figure>
   `;
@@ -460,9 +460,6 @@ function layoutPhotoGalleries() {
 }
 
 function layoutPhotoGallery(gallery) {
-  const images = [...gallery.querySelectorAll("img")];
-  if (!images.length) return;
-
   const styles = getComputedStyle(gallery);
   const columnGap = parseFloat(styles.columnGap);
   const flexGap = parseFloat(styles.gap);
@@ -470,38 +467,60 @@ function layoutPhotoGallery(gallery) {
   const targetHeight = window.matchMedia("(max-width: 650px)").matches ? 195 : 234;
   const width = gallery.clientWidth;
   if (!width) return;
+
+  resetPhotoGallery(gallery, targetHeight);
+
+  const rows = groupPhotoRows(gallery);
+  if (!rows.length) return;
+
+  gallery.classList.add("photo-grid-justified");
+  gallery.replaceChildren();
+
+  rows.forEach((row, index) => {
+    const rowElement = document.createElement("div");
+    const rowWidth = row.reduce((total, figure) => total + figure.getBoundingClientRect().width, 0);
+    const usableWidth = width - gap * (row.length - 1);
+    const scale = rowWidth ? usableWidth / rowWidth : 1;
+    const isLastRow = index === rows.length - 1;
+    const rowHeight = isLastRow && rows.length > 1
+      ? targetHeight
+      : Math.max(targetHeight, Math.floor(targetHeight * scale) - 1);
+
+    rowElement.className = "photo-row";
+    rowElement.style.setProperty("--photo-row-height", `${rowHeight}px`);
+    row.forEach((figure) => {
+      figure.querySelector("img")?.style.removeProperty("height");
+      rowElement.append(figure);
+    });
+    gallery.append(rowElement);
+  });
+}
+
+function resetPhotoGallery(gallery, targetHeight) {
+  const figures = [...gallery.querySelectorAll(".photo-tile")];
+  gallery.classList.remove("photo-grid-justified");
+  gallery.replaceChildren(...figures);
+  gallery.querySelectorAll("img").forEach((image) => {
+    image.style.height = `${targetHeight}px`;
+  });
+}
+
+function groupPhotoRows(gallery) {
+  const figures = [...gallery.querySelectorAll(".photo-tile")];
   const rows = [];
-  let row = [];
-  let ratioTotal = 0;
 
-  images.forEach((image) => {
-    const ratio = image.naturalWidth && image.naturalHeight
-      ? image.naturalWidth / image.naturalHeight
-      : 1;
-    const nextRatioTotal = ratioTotal + ratio;
-    const nextWidth = nextRatioTotal * targetHeight + gap * row.length;
+  figures.forEach((figure) => {
+    const top = Math.round(figure.offsetTop);
+    const row = rows.find((candidate) => candidate.top === top);
 
-    if (row.length && nextWidth > width) {
-      rows.push({ items: row, ratioTotal });
-      row = [{ image, ratio }];
-      ratioTotal = ratio;
+    if (row) {
+      row.items.push(figure);
     } else {
-      row.push({ image, ratio });
-      ratioTotal = nextRatioTotal;
+      rows.push({ top, items: [figure] });
     }
   });
 
-  if (row.length) rows.push({ items: row, ratioTotal });
-
-  const longestRow = rows.reduce((longest, current) => {
-    const currentWidth = current.ratioTotal * targetHeight + gap * (current.items.length - 1);
-    const longestWidth = longest.ratioTotal * targetHeight + gap * (longest.items.length - 1);
-    return currentWidth > longestWidth ? current : longest;
-  }, rows[0]);
-  const usableWidth = width - gap * (longestRow.items.length - 1);
-  const height = Math.max(targetHeight, usableWidth / longestRow.ratioTotal);
-
-  gallery.style.setProperty("--photo-height", `${Math.round(height)}px`);
+  return rows.map((row) => row.items);
 }
 
 function slugify(value) {
