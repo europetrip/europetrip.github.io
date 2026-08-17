@@ -6,5 +6,5 @@ window.tripPhotos = {
   "munich": [],
   "paris": [],
   "rome": [],
-  "vienna": [],
+  "vienna": ["IMG_1676.jpeg"],
 };
