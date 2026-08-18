@@ -123,6 +123,7 @@ const itinerary = [
         note: "Full Dolomites day",
         items: [
           { title: "Tre Cime di Lavaredo" },
+          { title: "Lago di Sorapis" },
         ],
       },
       {
