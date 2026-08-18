@@ -137,7 +137,7 @@ const itinerary = [
       {
         label: "Sun 20 Sep",
         note: "Travel day",
-        items: [{ title: "Slow morning in the mountains" }],
+        items: [{ title: "​Alpe di Siusi (Seiser Alm)" }],
         travel: [{ icon: "🚆", title: "Train to Florence", time: "7:10 PM" }],
       },
     ],
