@@ -123,15 +123,14 @@ const itinerary = [
         note: "Full Dolomites day",
         items: [
           { title: "Tre Cime di Lavaredo" },
-          { title: "Reserve parking space" },
         ],
       },
       {
         label: "Sat 19 Sep",
         note: "Full Dolomites day",
         items: [
+          { title: "Seceda ridgeline"},
           { title: "Val di Funes" },
-          { title: "Via ferrata maybe" },
         ],
       },
       {
