@@ -122,16 +122,16 @@ const itinerary = [
         label: "Fri 18 Sep",
         note: "Full Dolomites day",
         items: [
-          { title: "Tre Cime di Lavaredo" },
-          { title: "Lago di Sorapis" },
+          { title: "Seceda ridgeline"},
+          { title: "Val di Funes" },
         ],
       },
       {
         label: "Sat 19 Sep",
         note: "Full Dolomites day",
         items: [
-          { title: "Seceda ridgeline"},
-          { title: "Val di Funes" },
+          { title: "Lago di Sorapis" },
+          { title: "Tre Cime di Lavaredo", type: "booked", time: "4:00 PM"},
         ],
       },
       {
