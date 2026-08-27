@@ -199,7 +199,7 @@ const itinerary = [
         items: [
           { title: "Pizza" },
           { title: "Parliament Building" },
-          { title: "The Pantheon" },
+          { title: "The Pantheon", type: "booked", time: "2:00-3:00 PM" },
         ],
       },
       {
@@ -298,7 +298,10 @@ const itinerary = [
           { icon: "🚆", title: "Arrive in London", time: "8:30 AM" },
           { icon: "🚆", title: "Train to Oxford", time: "1:23 PM" },
         ],
-        items: [{ title: "London stopover" }],
+        items: [
+          { title: "London stopover" },
+          { title: "Turf Tavern", type: "booked", time: "6:30 PM" },
+        ],
       },
     ],
   },
