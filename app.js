@@ -87,7 +87,7 @@ const itinerary = [
         note: "Full Lucerne day",
         items: [
           { title: "Mount Pilatus" },
-          { title: "Rathaus Brauerei (needs booking)"}
+          { title: "Rathaus Brauerei"}
         ],
       },
       {
