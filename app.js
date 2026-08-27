@@ -41,13 +41,16 @@ const itinerary = [
         travel: [{ icon: "🚆", title: "Arrive in Munich", time: "1:54 PM" }],
         items: [
           { title: "Marienplatz" },
-          { title: "Hofbrauhaus Munchen" },
+          { title: "Hofbräuhaus (no booking, just walk in)", type: "booked", time: "6:00 PM"},
         ],
       },
       {
         label: "Sat 12 Sep",
         note: "Full Munich day",
-        items: [{ title: "Self-directed Third Reich tour" }],
+        items: [
+          { title: "Self-directed Third Reich tour" },
+          { title: "Augustiner-Keller", type: "booked", time: "6:00 PM"}
+        ],
       },
       {
         label: "Sun 13 Sep",
@@ -84,6 +87,7 @@ const itinerary = [
         note: "Full Lucerne day",
         items: [
           { title: "Mount Pilatus" },
+          { title: "Rathaus Brauerei (needs booking)"}
         ],
       },
       {
@@ -122,7 +126,7 @@ const itinerary = [
         label: "Fri 18 Sep",
         note: "Full Dolomites day",
         items: [
-          { title: "Seceda ridgeline"},
+          { title: "Seceda ridgeline (lunch at Baita Sofie)"},
           { title: "Val di Funes" },
         ],
       },
