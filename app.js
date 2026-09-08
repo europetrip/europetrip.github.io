@@ -271,6 +271,7 @@ const itinerary = [
           { title: "Place de la Concorde" },
           { title: "The Louvre", type: "booked", time: "1:00 PM" },
           { title: "Champs-Elysees and Arc de Triomphe" },
+          { title: "Parc de Belleville" },
         ],
       },
       {
