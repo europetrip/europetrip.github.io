@@ -19,6 +19,7 @@ const itinerary = [
         items: [
           { title: "Hofburg Palace and gardens" },
           { title: "Kunsthistorisches Museum Wien" },
+          { title: "Lunch: Vienna Sausage" },
           { title: "Mozart things" },
           { title: "Blockfabrik" },
         ],
