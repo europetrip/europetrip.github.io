@@ -91,6 +91,7 @@ const itinerary = [
         items: [
           { title: "Boat for Mount Pilatus", type: "booked", time: "9:38am" },
           { title: "Cogwheel train", type: "booked", time: "11:05am" },
+          { title: "Tomlishorn hike" },
           { title: "Rathaus Brauerei"}
         ],
       },
