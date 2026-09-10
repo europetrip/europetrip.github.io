@@ -89,7 +89,8 @@ const itinerary = [
         label: "Tue 15 Sep",
         note: "Full Lucerne day",
         items: [
-          { title: "Mount Pilatus" },
+          { title: "Boat for Mount Pilatus", type: "booked", time: "9:38am" },
+          { title: "Cogwheel train", type: "booked", time: "11:05am" },
           { title: "Rathaus Brauerei"}
         ],
       },
