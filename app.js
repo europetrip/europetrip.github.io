@@ -52,6 +52,7 @@ const itinerary = [
         note: "Full Munich day",
         items: [
           { title: "Self-directed Third Reich tour" },
+          { title: "Mini-Hofbräuhaus im Englischen Garten", type: "booked", time: "11:30 AM"},
           { title: "Augustiner-Keller", type: "booked", time: "6:00 PM"}
         ],
       },
