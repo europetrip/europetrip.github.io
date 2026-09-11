@@ -60,7 +60,6 @@ const itinerary = [
         label: "Sun 13 Sep",
         note: "Full Munich day",
         items: [
-          { title: "Englischer Garten" },
           { title: "Flexible Munich day" },
         ],
       },
