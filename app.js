@@ -51,7 +51,6 @@ const itinerary = [
         label: "Sat 12 Sep",
         note: "Full Munich day",
         items: [
-          { title: "Self-directed Third Reich tour" },
           { title: "Mini-Hofbräuhaus im Englischen Garten", type: "booked", time: "11:30 AM"},
           { title: "Augustiner-Keller", type: "booked", time: "6:00 PM"}
         ],
@@ -60,7 +59,7 @@ const itinerary = [
         label: "Sun 13 Sep",
         note: "Full Munich day",
         items: [
-          { title: "Flexible Munich day" },
+          { title: "Third Reich tour" },
         ],
       },
       {
