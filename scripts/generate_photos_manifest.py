@@ -9,11 +9,14 @@ IMAGE_EXTENSIONS = {".avif", ".gif", ".heic", ".jpeg", ".jpg", ".png", ".webp"}
 
 def city_photos(city_dir):
     return sorted(
-        path.name
-        for path in city_dir.iterdir()
-        if path.is_file()
-        and not path.name.startswith(".")
-        and path.suffix.lower() in IMAGE_EXTENSIONS
+        [
+            {"src": path.name, "size": path.stat().st_size}
+            for path in city_dir.iterdir()
+            if path.is_file()
+            and not path.name.startswith(".")
+            and path.suffix.lower() in IMAGE_EXTENSIONS
+        ],
+        key=lambda photo: photo["src"],
     )
 
 

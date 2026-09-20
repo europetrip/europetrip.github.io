@@ -342,7 +342,6 @@ let selectedSegment = null;
 loadPhotoManifest().then(() => {
   renderNavigation();
   renderCities();
-  initPhotoLayouts();
   syncViewFromHash();
 });
 
@@ -360,6 +359,10 @@ spinWheelButton.addEventListener("click", spinWheel);
 wheelOptions.addEventListener("input", updateWheelFromOptions);
 closeResultButton.addEventListener("click", closeResultModal);
 removeResultButton.addEventListener("click", removeSelectedSegment);
+citiesRoot.addEventListener("click", (event) => {
+  const button = event.target.closest(".load-photos-button");
+  if (button) loadCityPhotos(button);
+});
 resultModal.addEventListener("click", (event) => {
   if (event.target === resultModal || event.target.classList.contains("result-modal-backdrop")) {
     closeResultModal();
@@ -630,14 +633,49 @@ function renderPhotoGallery(city, citySlug) {
   if (!photos.length) return "";
 
   const galleryId = `${citySlug}-photos`;
+  const totalBytes = photos.reduce((total, photo) => total + getPhotoSize(photo), 0);
+  const sizeEstimate = totalBytes ? `About ${formatBytes(totalBytes)} of data` : "Data use unknown";
 
   return `
     <section class="photo-section" aria-label="${city.city} photos">
-      <div class="photo-grid" id="${galleryId}">
-        ${photos.map((photo, index) => renderPhoto(photo, city, citySlug, index)).join("")}
+      <div class="photo-load-prompt">
+        <button
+          class="load-photos-button"
+          type="button"
+          data-city="${citySlug}"
+          data-gallery="${galleryId}"
+        >Load photos</button>
+        <span>${photos.length} photos · ${sizeEstimate}</span>
       </div>
+      <div class="photo-grid" id="${galleryId}" hidden></div>
     </section>
   `;
+}
+
+async function loadCityPhotos(button) {
+  const citySlug = button.dataset.city;
+  const gallery = document.getElementById(button.dataset.gallery);
+  const city = itinerary.find((entry) => slugify(entry.city) === citySlug);
+  const photos = tripPhotos[citySlug] ?? [];
+  if (!gallery || !city || !photos.length) return;
+
+  button.disabled = true;
+  button.textContent = "Loading photos...";
+  gallery.innerHTML = photos.map((photo, index) => renderPhoto(photo, city, citySlug, index)).join("");
+  gallery.hidden = false;
+
+  await Promise.all([...gallery.querySelectorAll("img")].map(waitForImage));
+  layoutPhotoGallery(gallery);
+  button.closest(".photo-load-prompt")?.remove();
+}
+
+function getPhotoSize(photo) {
+  return typeof photo === "object" && Number.isFinite(photo.size) ? photo.size : 0;
+}
+
+function formatBytes(bytes) {
+  if (bytes < 1024 * 1024) return `${Math.ceil(bytes / 1024)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(bytes >= 10 * 1024 * 1024 ? 0 : 1)} MB`;
 }
 
 function renderPhoto(photo, city, citySlug, index) {
@@ -651,13 +689,6 @@ function renderPhoto(photo, city, citySlug, index) {
       ${caption ? `<figcaption>${caption}</figcaption>` : ""}
     </figure>
   `;
-}
-
-function initPhotoLayouts() {
-  const images = [...document.querySelectorAll(".photo-grid img")];
-  if (!images.length) return;
-
-  Promise.all(images.map(waitForImage)).then(layoutPhotoGalleries);
 }
 
 function waitForImage(image) {

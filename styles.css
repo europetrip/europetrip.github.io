@@ -598,11 +598,48 @@ h1 {
   margin-top: 1rem;
 }
 
+.photo-load-prompt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 0.85rem;
+}
+
+.photo-load-prompt span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.load-photos-button {
+  min-height: 44px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--text);
+  padding: 0 0.9rem;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.load-photos-button:hover {
+  background: var(--panel-strong);
+}
+
+.load-photos-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
 .photo-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 0.85rem;
   align-items: flex-start;
+}
+
+.photo-grid[hidden] {
+  display: none;
 }
 
 .photo-grid-justified {
