@@ -229,6 +229,7 @@ const itinerary = [
         items: [
           { title: "Roman Forum" },
           { title: "Mouth of Truth" },
+          { title: "Colosseum", type: "booked", time: "4:15 PM" },
         ],
       },
       {
