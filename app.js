@@ -264,8 +264,8 @@ const itinerary = [
         note: "Full Paris day",
         items: [
           { title: "Paul Bakery" },
-          { title: "Notre-Dame" },
           { title: "Musee d'Orsay", type: "booked", time: "1:30 PM" },
+          { title: "Champs-Elysees and Arc de Triomphe" },
           { title: "Napoleon's Tomb and Army Museum" },
         ],
       },
@@ -274,8 +274,8 @@ const itinerary = [
         note: "Full Paris day",
         items: [
           { title: "Place de la Concorde" },
+          { title: "Notre-Dame" },
           { title: "The Louvre", type: "booked", time: "1:00 PM" },
-          { title: "Champs-Elysees and Arc de Triomphe" },
           { title: "Parc de Belleville" },
         ],
       },
